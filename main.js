@@ -22,7 +22,6 @@ const showMsg = (text, status) => {
 
 clear.addEventListener('click', function(){
   ul.innerHTML = ""
-
   showMsg("All item has been removed", "all-remove")
 
 })
@@ -39,11 +38,20 @@ const createList = (uniqueId, finalText) =>{
      /*html*/
     toDoList.innerHTML = `
       <span>${finalText}</span>
-      <span><button class="trash" id="deleteButton"><i class="fa-solid fa-trash"></i></button></span>
+      
+      <span><button class="edit" id="editButton"><i class="fa-regular fa-pen-to-square"></i></button><button class="trash" id="deleteButton"><i class="fa-solid fa-trash"></i></button></span>
+      
+      
   
     `
     ul.appendChild(toDoList)
 
+
+  // Edit Todo
+  const editButton = toDoList.querySelector('.edit')
+  editButton.addEventListener('click', function(event){
+
+  })
     
   // Delete ToDo
 const deleteButton = toDoList.querySelector('.trash')
@@ -55,7 +63,7 @@ deleteButton.addEventListener('click', function(event){
      let todos = getTodoFromLocalStorage();
      todos = todos.filter((todo) => todo.uniqueId !== selectedTodo.id)
   localStorage.setItem("myTodos", JSON.stringify(todos));
-
+  
 })
 
   } else{
@@ -63,22 +71,37 @@ deleteButton.addEventListener('click', function(event){
     
   }
 
+  // Edit Todo
 
-  // Remove ul
+  const editButton = document.querySelectorAll('.edit')
+  editButton.forEach(button => {
+    button.addEventListener('click', function(event){
+     
+    const selectedTodo = event.target.parentElement.parentElement.parentElement;
+    const textToBeEdit = (selectedTodo.innerText);
+      input.value = textToBeEdit
+      input.setAttribute('data-edit', uniqueId)
 
+      console.log(selectedTodo.id)
+      
+    })
+  })
  
 
   // Add todo to Local Storage
   const todos = getTodoFromLocalStorage()
   todos.push({uniqueId, finalText});
   localStorage.setItem("myTodos", JSON.stringify(todos));
+  input.value = ""
+  input.removeAttribute('data-edit')
 
-  finalText = ""
 }
+
 
 
 // Get todos From Local Storage
 const getTodoFromLocalStorage = () => {
+  
   return localStorage.getItem("myTodos") ? JSON.parse(localStorage.getItem("myTodos")) : [];
 }
 
@@ -92,14 +115,15 @@ btn.addEventListener('click', function(event){
 const uniqueId = Date.now().toString();
 
 createList(uniqueId, finalText)
+
 })
 
 
 // DOM Load
 const todoLoad = () => {
+
   const todos = getTodoFromLocalStorage();
   todos.map((todo) => {
     createList(todo.uniqueId, todo.finalText)
   })
 }
-

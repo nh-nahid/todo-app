@@ -81,6 +81,15 @@ input{
   border: none;
   background: transparent;
   color: red;
+  cursor: pointer;
+}
+
+
+.edit{
+  border: none;
+  background: transparent;
+  color: #4492ca;
+  cursor: pointer;
 }
 
 .msg-success{
